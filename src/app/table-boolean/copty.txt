@@ -1,0 +1,83 @@
+<div class="btn-group" *ngFor = "let btn of types ; let i=index">
+    <button class="mr-2 btn btn-primary" (click)="onClick($event , btn,'cl'+i)">{{btn.label}}</button>
+
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th *ngFor = "let label of types ; let i= index"class="cl{{i}}">{{label.label}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let arr of tabValue">
+            <td *ngFor ="let val of arr ; let i = index " class="cl{{i}}"> {{val}}</td>
+        </tr>
+    </tbody>
+</table>
+-------------------------------------------------------------------------->
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-table-boolean',
+  templateUrl: './table-boolean.component.html',
+  styleUrls: ['./table-boolean.component.css']
+})
+export class TableBooleanComponent implements OnInit {
+types = [
+    {label:'Name', value:'1', isActive:false},
+    {label:'Address',value:'#',isActive:false},
+    {label:'Email',value:'D',isActive:false}
+]
+ array =[
+{Name:"A",Address: "A1",Email:"a@gmail.com"},
+{Name:"B",Address: "A1",Email:"a@gmail.com"},
+{Name:"C",Address: "A1",Email:"a@gmail.com"},
+{Name:"D",Address: "A1",Email:"a@gmail.com"},
+{Name:"E",Address: "A1",Email:"a@gmail.com"}
+]
+tabKey = [];
+ tabValue = [];
+  toggle: boolean;
+
+  newArr: { label: string; value: string; isActive: boolean; }[];
+  constructor() {
+    console.log(this.tabKey, this.tabValue)
+  }
+
+
+  getData(){
+    this.array.forEach((element)=>{
+   this.tabKey = (Object.keys(element));
+   this.tabValue.push(Object.values(element))
+     });
+    }
+
+  onClick(event,i,index){
+    if(i.isActive === false){
+      i.isActive = true
+    } else {
+      i.isActive = false
+    }
+    console.log(event.target.innerHTML, i)
+    var cl = document.getElementsByClassName(index);
+
+    if(i.isActive === true){
+  for(let i=0;i<cl.length;i++){
+    cl[i].classList.add("tabCol")
+  }
+  } else {
+    for(let i=0;i<cl.length;i++){
+      cl[i].classList.remove("tabCol")
+    } 
+  }
+
+
+
+  }
+  ngOnInit() {
+    this.getData();
+  }
+
+}

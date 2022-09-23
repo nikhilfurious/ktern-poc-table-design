@@ -1,0 +1,170 @@
+<div  style="display: flex;">
+    <button  id="btn1" style="margin-right: 20px;" pButton type="button" (click)="op.toggle($event)" icon="pi pi-table" ></button>
+    <div class="col-md-4">
+        <button  id="btn1" pButton type="button" (click)="mf.toggle($event)" icon="pi pi-filter" ></button>
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input type="text" pInputText placeholder="Search"/>
+        </span>
+    </div>
+</div>
+
+<div class="ui-g ui-fluid">
+
+    <!-- Overlayy Panel  -->
+        <p-overlayPanel #op [style]="{width: 'auto', height: 'auto'}" >
+            
+            <h6>Table Column</h6> 
+            <div class = "btn-group" *ngFor = "let i of types , let n = index">
+            <button   
+            [style.background-color]="i.isActive ? 'violet' : 'white'"
+            class="mr-2 btn btn-primary" 
+            (click)="onColumnOrder($event,i,'cl'+n)">
+            {{i.label}}</button>
+    
+            </div>
+         <br>
+            <h6>Display Columns</h6> 
+            <div class = "btn-group" *ngFor = "let i of newArr">
+          
+             <button 
+              class="mr-2 btn btn-primary" 
+             >
+             {{i.label}}</button>
+    
+            </div>
+            <br>
+    
+            <h6>Amount</h6>
+            <div class="p-buttonset">
+                <p-selectButton [options]="account" [(ngModel)]="accont_value"></p-selectButton>
+            </div>
+            <br>
+    
+            <h6>Date Format</h6>
+            <div class="p-buttonset">
+                <p-selectButton [options]="date_format_type" [(ngModel)]="date_format"></p-selectButton>
+            </div>
+         <br>
+    
+          <div>
+              <input type="checkbox" > Sticky header 
+          </div>
+          <hr>
+    
+          <div class="flex-end">
+            <button class=" mr-2 btn btn-info">Reset</button>
+            <button class=" mr-2 btn btn-primary">Button</button>
+          </div>
+    
+        </p-overlayPanel>
+    <!-- Overlayy Panel End -->
+    <p-overlayPanel #mf>
+      <app-filter></app-filter>
+    </p-overlayPanel>   
+</div>
+<div style="margin-bottom: 10px;margin-top:20px;margin-right: 10px;">
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist" >
+      <button  
+      (click)="onMenu($event)"
+      [ngClass]="isActive && 'active' "
+       class="nav-link"
+       id="nav-home-tab" 
+       data-bs-toggle="tab" 
+       data-bs-target="#nav-home"
+        type="button"
+        role="tab" 
+        aria-controls="nav-home"
+         aria-selected="true"
+        *ngFor = "let i of menus">{{i.label}}
+           <span class="badge bg-secondary">{{i.length}}</span>
+        </button>
+
+
+    </div>
+  </nav>
+  </div>
+
+ 
+<p-table [columns]="newArr" [value]="menu ? projects : menu_filter_array " dataKey="id" styleClass="p-datatable-sm"responsiveLayout="scroll"  [reorderableColumns]="true">>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem"></th>
+            <th>
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th  pSortableColumn="id">#<p-sortIcon field="id"></p-sortIcon></th>
+            <th  class="cl0" pSortableColumn="projectName">Project Name<p-sortIcon field="projectName"></p-sortIcon></th>
+            <th class="cl1">PM</th>
+            <th class="cl2" pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+            <th class="cl3" pSortableColumn="lastUpdate"> Last Update <p-sortIcon field="lastUpdate"></p-sortIcon></th>
+            <th class="cl4" pSortableColumn="resources">Resources<p-sortIcon field="resources"></p-sortIcon></th>
+            <th class="cl5" pSortableColumn="projectTimeline">Project Timeline<p-sortIcon field="projectTimeline"></p-sortIcon></th>
+            <th class="cl6" pSortableColumn="estimation">Estimation<p-sortIcon field="estimation"></p-sortIcon></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-project let-expanded="expanded">
+        <tr>
+            <td>
+                <button type="button" pButton pRipple [pRowToggler]="project" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td>
+                <p-tableCheckbox [value]="project"></p-tableCheckbox>
+            </td>
+            <td pEditableColumn>
+                <p-cellEditor [style]="{'width':'50px'}">
+                    <ng-template pTemplate="input" >
+                        <input  pInputText type="text" [(ngModel)]="project.id"> 
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{project.id}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td class="cl0">{{project.projectName}}</td>
+            <td class="cl1">PM</td>
+            <td class="cl2">{{project.status}}</td>
+           <td class="cl3">{{project.lastUpdate}}</td>
+           <td class="cl4">{{project.resources}}</td>
+            <td class="cl5">{{project.projectTimeLine}}</td>
+           <td class="cl6">{{project.estimation}}</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-project>
+     
+        <tr>
+            <td colspan="7">
+                <div class="p-p-3">
+                    <!-- <div class="container">
+                        <ul class="timeline" *ngFor = "let i of project.traker">
+                            <li>
+                              <div class="timeline-badge"><i class="bi bi-calendar2-event"></i></div>
+                              <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                  <h4 class="timeline-title">Event</h4>
+                                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> 11 hours ago via Twitter</small></p>
+                                </div>
+                                <div class="timeline-body">
+                                  {{i.status}}
+                                </div>
+                              </div>
+                            </li>
+    
+                        </ul>
+                      </div> -->
+                    
+                        <h5>Left Align</h5>
+                        <p-timeline [value]="project.traker">
+                            <ng-template pTemplate="content" let-event>
+                                &#123;&#123;event.status&#125;&#125;
+                            </ng-template>
+                        </p-timeline>
+                    </div>
+                
+            </td>
+        </tr>
+    
+    </ng-template>
+  </p-table>
+

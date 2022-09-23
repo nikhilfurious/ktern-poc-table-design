@@ -1,0 +1,93 @@
+{
+    "data":[
+    {
+    "id":1,
+    "projectName":"Kaar Tech",
+    "status":"Risk",
+    "lastUpdate": "15 Mar 2021, 12:47pm",
+    "resources": 3,
+    "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
+    "projectTimeLine": "15 May 2022 , 17 Aug 2023",
+   "estimation" :"US$ 10.5K",
+   "projectTracker":[{
+       "estimation":"Roger updated estimation from US$ 15k to US$ 10K on May 18 2021 @ 4.14pm",
+       "status":"Roger changed status from On Hold 15k to On Track on May 18 2021 @ 4.14pm",
+       "created":"Roger created project on 11 May 2021"
+   }]
+},
+{
+    "id":2,
+    "projectName":"Daimler",
+    "status":"On track",
+    "lastUpdate": "15 Mar 2021, 12:47pm",
+    "resources": 3,
+    "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
+    "projectTimeLine": " 15 May 2022 > 17 Aug 2023",
+   "estimation" :"US$ 10.5K",
+   "projectTracker":[{
+       "estimation":"Roger updated estimation from US$ 15k to US$ 10K on May 18 2021 @ 4.14pm",
+       "status":"Roger changed status from On Hold 15k to On Track on May 18 2021 @ 4.14pm",
+       "created":"Roger created project on 11 May 2021"
+   }]
+},
+{
+    "id":3,
+    "projectName":"Dell",
+    "status":"On Hold",
+    "lastUpdate": "15 Mar 2021, 12:47pm",
+    "resources": 3,
+    "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
+    "projectTimeLine": " 15 May 2022 > 17 Aug 2023",
+   "estimation" :"US$ 10.5K",
+   "projectTracker":[{
+       "estimation":"Roger updated estimation from US$ 15k to US$ 10K on May 18 2021 @ 4.14pm",
+       "status":"Roger changed status from On Hold 15k to On Track on May 18 2021 @ 4.14pm",
+       "created":"Roger created project on 11 May 2021"
+   }]
+},
+{
+    "id":4,
+    "projectName":"Almas Tofech",
+    "status":"Potential Risk",
+    "lastUpdate": "15 Mar 2021, 12:47pm",
+    "resources": 3,
+    "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
+    "projectTimeLine": " 15 May 2022 > 17 Aug 2023",
+   "estimation" :"US$ 10.5K",
+   "projectTracker":[{
+       "estimation":"Roger updated estimation from US$ 15k to US$ 10K on May 18 2021 @ 4.14pm",
+       "status":"Roger changed status from On Hold 15k to On Track on May 18 2021 @ 4.14pm",
+       "created":"Roger created project on 11 May 2021"
+   }]
+},
+{
+    "id":5,
+    "projectName":"Al Bid Info Tech",
+    "status":"Risk",
+    "lastUpdate": "15 Mar 2021, 12:47pm",
+    "resources": 3,
+    "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
+    "projectTimeLine": " 15 May 2022 > 17 Aug 2023",
+   "estimation" :"US$ 10.5K",
+   "projectTracker":[{
+       "estimation":"Roger updated estimation from US$ 15k to US$ 10K on May 18 2021 @ 4.14pm",
+       "status":"Roger changed status from On Hold 15k to On Track on May 18 2021 @ 4.14pm",
+       "created":"Roger created project on 11 May 2021"
+   }]
+},
+{
+    "id": 6,
+    "projectName":"Al Rias ",
+    "status":"Risk",
+    "lastUpdate": "15 Mar 2021, 12:47pm",
+    "resources": 3,
+    "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
+    "projectTimeLine": " 15 May 2022 > 17 Aug 2023",
+   "estimation" :"US$ 10.5K",
+   "projectTracker":[{
+       "estimation":"Roger updated estimation from US$ 15k to US$ 10K on May 18 2021 @ 4.14pm",
+       "status":"Roger changed status from On Hold 15k to On Track on May 18 2021 @ 4.14pm",
+       "created":"Roger created project on 11 May 2021"
+   }]
+}]
+   }

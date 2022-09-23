@@ -1,1 +1,50 @@
-/* You can add global styles to this file, and also import other style files */
+@import  "~primeicons/primeicons.css";
+@import  "~primeng/resources/primeng.min.css";
+@import  "~primeflex/primeflex.css";
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
+
+body .ui-selectbutton .ui-button {
+    background-color: #dadada;
+    border: 1px solid #dadada;
+    color: #333;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    margin-right: 10px;
+}
+
+.btn-group-vertical>.btn, .btn-group>.btn {
+    position: relative;
+    flex: 13 1 auto;
+    font-size: 10px;
+    background-color: #fff;
+    font-color: black;
+    color: #000;
+}
+.p-timeline-event-content, .p-timeline-event-opposite {
+   
+       padding: 0 7rem;
+       position: relative;
+
+       padding-top: 0px;
+       padding-right: 1rem;
+       padding-bottom: 0px;
+       padding-left: 1rem;
+   }
+   
+.p-timeline-vertical .p-timeline-event-opposite, .p-timeline.p-timeline-vertical .p-timeline-event-content {
+    padding-top: 0px;
+    padding-right: 1rem;
+    padding-bottom: 0px;
+    padding-left: 1rem;
+    position: relative
+     
+     
+   }
+
+.p-overlaypanel {
+    background: #fff;
+    color: #495057;
+    border: 24 none;
+    border-radius: 25px;
+    box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%);
+}

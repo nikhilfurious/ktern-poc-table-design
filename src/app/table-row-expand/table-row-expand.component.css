@@ -1,0 +1,70 @@
+.pSelectButtonStyle {
+    border-top-left-radius: .3em;
+    border-top-right-radius: .3em;
+    border-bottom-left-radius: .3em;
+    border-bottom-right-radius: .3em;
+    border-left: solid #cccccc .07em;
+    border-right: solid #cccccc .07em;
+}
+
+.flex-end {
+
+  display: flex;
+  justify-content: flex-end;
+}
+.purple{
+  background-color: purple;
+}
+.white{
+  background-color: white;
+}
+.cl1{
+    display:none;
+}
+th{
+  width: "3rem"
+}
+.p-checkbox ,.p-checkbox-box {
+  border: 2px solid #ced4da;
+  background: #fff;
+  width: 14px;
+  height: 14px;
+  color: #a3b0bd;
+  border-radius: 3px;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+
+.p-timeline-event-content, .p-timeline-event-opposite {
+  /* flex: 1; */
+  padding: 0 1rem;
+  display: flex !important;
+  flex: 0;
+  position: absolute;
+}
+
+.p-timeline.p-timeline-vertical .p-timeline-event-opposite, .p-timeline.p-timeline-vertical .p-timeline-event-content {
+  padding: 0 1rem;
+  flex: 0;
+  position: absolute;
+  display: flex! important
+}
+
+.p-timeline-vertical .p-timeline-event-opposite, .p-timeline.p-timeline-vertical .p-timeline-event-content {
+  padding-top: 1px;
+  padding-right: 1rem;
+  padding-bottom: 0px;
+  padding-left: 1rem;
+  position: absolute;
+}
+
+.tabCol{
+  display: none;
+}
+
+.p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
+  padding: 0.5rem 0.5rem;
+  background: #add8e6;
+  color: #000;
+  /* --bs-link-hover-color: #a52a2a; */
+}
