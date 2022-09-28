@@ -4,22 +4,21 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 @import "~ng-zorro-antd/ng-zorro-antd.min.css";
 
-body .ui-selectbutton .ui-button {
+/* body .ui-selectbutton .ui-button {
     background-color: #dadada;
     border: 1px solid #dadada;
     color: #333;
     transition: background-color 0.2s, box-shadow 0.2s;
     margin-right: 10px;
-}
+} */
 
-.btn-group-vertical>.btn, .btn-group>.btn {
+/* .btn-group-vertical>.btn, .btn-group>.btn {
     position: relative;
     flex: 13 1 auto;
     font-size: 10px;
-    background-color: #fff;
     font-color: black;
     color: #000;
-}
+} */
 .p-timeline-event-content, .p-timeline-event-opposite {
    
        padding: 0 7rem;
