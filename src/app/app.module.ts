@@ -37,12 +37,22 @@ import {ListboxModule} from 'primeng/listbox';
 import { NgZorroAntdModule, NZ_I18N, en_US } from "ng-zorro-antd";
 import _, { map } from 'underscore';
 import { ThousandPipePipe } from './thousand-pipe.pipe'
+import {CalendarModule} from 'primeng/calendar';
+import { TableDisplayComponent } from './table-display/table-display.component';
+import {TooltipModule} from 'primeng/tooltip';
+import {AvatarModule} from 'primeng/avatar';
+
+import {DialogModule} from 'primeng/dialog';
+import { TableCheckComponent } from './table-check/table-check.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     TableRowExpandComponent,
     MenuItemContent,
-    ThousandPipePipe
+    ThousandPipePipe,
+    TableDisplayComponent,
+    TableCheckComponent
   ],
   imports: [
     BrowserModule,
@@ -69,9 +79,10 @@ import { ThousandPipePipe } from './thousand-pipe.pipe'
     ToastModule,
     ListboxModule,
     NgZorroAntdModule,
- 
-
-
+    CalendarModule,
+    TooltipModule,
+    AvatarModule,
+    DialogModule
 
   ],
   providers: [FilterService, ProductService , PrimeNGConfig,MessageService , CustomerService],

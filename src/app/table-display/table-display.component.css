@@ -7,69 +7,10 @@
   border-right: solid #cccccc .07em;
 }
 
-/*mnew*/
-.table {
-  width:100%;
-  white-space: nowrap;
-}
-::ng-deep #helo .p-overlaypanel .p-overlaypanel-content {
-  padding: 0.1rem !important;
-  text-align: center;
-}
-::ng-deep #helo .p-overlaypanel .p-overlaypanel-content span{
-  color: blue !important;
-  background-color: aliceblue;
-  text-align: center;
-}
-::ng-deep #helo .p-overlaypanel {
-  color: #186ba0;
-  text-align: center;
-}
-
-.p-datatable .p-sortable-column {
-  display: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  cursor: pointer;
-  user-select: none;
-}
-.p-sortable-column p-sortIcon{
-  display: none;
-}
-.p-datatable .p-datatable-thead > tr > th {
-  text-align: left;
-  padding: 1rem 1rem;
-  border: 1px solid #e9ecef;
-  border-width: 0 0 1px 0;
-  font-weight: 600;
-  color: #495057;
-  background: #f8f9fa;
-  transition: box-shadow 0.2s;
-}
-.p-inputtext {
-  color: crimson;
-  width: fit-content;
-}
-/*mnew*/
-
 /* mcss */
 
 .string{
   color: blue;
-}
-
-.fnumbers{
-  color: blue;
-  /* padding: 2px; */
-  background-color: lightblue;
-  vertical-align: top;
-  border-radius: 50px;
-  padding-left: 2px;
-  padding-right: 2px;
-}
-
-.statusstring span{
-  border-radius: 5px;
 }
 
 .statusstring[title~=Risk] span{
@@ -148,8 +89,8 @@
   background-color: aliceblue;
   color: blue;
   border-radius: 5px;
-  justify-content: center;
   text-align: center;
+  justify-content: center;
 }
 .tdinlinei {
   display: inline;
@@ -162,10 +103,6 @@
   /* text-align: center; */
   color: #000;
 }
-#std div:nth-child(even){
-  min-width: 30%;
-  text-align: center;
-}
 #std div:nth-child(odd){
   text-align: center;
   align-content: center;
@@ -173,44 +110,9 @@
   justify-content: center;
   min-width: 43%;
 }
-::ng-deep .p-timeline-left .p-timeline-event-opposite {
-  text-align: right;
-  display: none;
-}
-.pi-plus:before{
-  text-align: center;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-}
-.pi-plus[_ngcontent-fbb-c1]:before {
-  text-align: center;
-  align-content: center;
-  align-items: center;
-  justify-content: center;  
-}
-/* .pi-plus{
-  text-align: center;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-} */
-.priorities-list__body {
-  flex-grow: 1;
-  overflow: auto;
-  flex: 0 1 auto;
-  max-height: 351px;
-}
-.pi-plus{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-  text-align: center;
-}
+
 .cend.inactive {
   display: none;
-  text-align: center;
 }
 
 .cend {
@@ -359,4 +261,97 @@ th {
   display: flex;
   /* background-color: yellow; */
   flex-wrap: wrap;
+}
+
+
+.p-timeline-event-content, .p-timeline-event-opposite {
+
+    padding: 0 1rem;
+    display: flex !important;
+    margin-right: 96px;
+}
+
+.string{
+  color: blue;
+}
+.status span{
+  border-radius: 5px;
+}
+
+.status[title~=Risk] span{
+  color: crimson;
+  padding: 2px;
+  background-color: lightpink;
+}
+
+/* .statusstring[title~=Ontrack]{
+  color: green;
+} */
+.status[title~=Ontrack] span{
+  color: green;
+  padding: 2px;
+  background-color: lightgreen;
+}
+.status span{
+  color: crimson;
+  padding: 2px;
+  background-color: lightsalmon;
+}
+.status[title~=OnHold] span{
+  color: dodgerblue;
+  padding: 2px;
+  background-color: lightblue;
+}
+.status{
+  padding: 10px;
+}
+
+
+.p-timeline-event-content,
+.p-timeline-event-opposite {
+  /* flex: 1; */
+  padding: 0 1rem;
+  display: flex !important;
+  flex: 0;
+  position: absolute;
+}
+
+.p-timeline.p-timeline-vertical .p-timeline-event-opposite,
+.p-timeline.p-timeline-vertical .p-timeline-event-content {
+  padding: 0 1rem;
+  flex: 0;
+  position: absolute;
+  display: flex ! important
+}
+
+.p-timeline-vertical .p-timeline-event-opposite,
+.p-timeline.p-timeline-vertical .p-timeline-event-content {
+  padding-top: 1px;
+  padding-right: 1rem;
+  padding-bottom: 0px;
+  padding-left: 1rem;
+  position: absolute;
+}
+
+.fnumbers{
+  color: blue;
+  /* padding: 2px; */
+  background-color: lightblue;
+  vertical-align: top;
+  border-radius: 50px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+:host ::ng-deep .p-cell-editing {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.hide{
+  display: none;
+}
+
+.tracker span{
+  color: crimson;
+  padding: 2px;
+  background-color: lightsalmon;
 }

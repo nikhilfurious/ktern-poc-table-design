@@ -1,0 +1,339 @@
+<p-toast position="top-right"></p-toast>
+
+<div  style="display: flex;">
+    <button  id="btn1" style="margin-right: 20px;" pButton type="button" (click)="op.toggle($event)" icon="pi pi-table" ></button>
+    <div class="col-md-4">
+        <button  id="btn1" pButton type="button" (click)="mf.toggle($event) ;" icon="pi pi-filter" ></button>
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
+        </span>
+    </div>
+    <button class='btn btn-success pull-right' style="margin-left: 900px ;" (click)="onSaveProject()">
+        Save
+    </button>
+
+    <!-- <button pButton type="button">New Project</button> -->
+
+</div>
+
+<div class="ui-g ui-fluid">
+
+    <!-- Overlayy Panel  -->
+        <p-overlayPanel [showTransitionOptions]="'1ms'" [hideTransitionOptions]="'1ms'" #op [dismissable]="true" [style]="{width: 'auto', height: 'auto'}" >
+            
+            <h6>Table Column</h6> 
+            <div class="btn-group" *ngFor = "let i of types , let n = index">
+           <button   
+           class="mr-2 btn"     
+           [ngClass]="{ 'btn-primary': i.isVisible,
+           'btn-secondary': !i.isVisible }"
+          
+            (click)="onColumnOrder($event,i,'cl'+n)">
+            {{i.header}}</button>
+            </div>
+         <br>
+
+    
+            <h6>Amount</h6>
+            <div class="p-buttonset">
+                <p-selectButton id="amount" [options]="account" [(ngModel)]="account_value" (onOptionClick)="onAmountChange($event)"></p-selectButton>
+            </div>
+            <br>
+    
+            <h6>Date Format</h6>
+            <div class="p-buttonset">
+                <p-selectButton id="date" [options]="date_format_type" [(ngModel)]="date_format_value" (onOptionClick)="onDateChange($event)"></p-selectButton>
+            </div>
+         <br>
+    
+          <div>
+              <input type="checkbox" > Sticky header 
+          </div>
+          <hr>
+    
+          <div class="flex-end">
+            <button class=" mr-2 btn btn-info" (click)="onSettingsReset()">Reset</button>
+            <button class=" mr-2 btn btn-success" (click)="onSettingsSave()">Save</button>
+          </div>
+    
+        </p-overlayPanel>
+    <!-- Overlayy Panel End -->
+    <div>  
+    <p-overlayPanel #mf  >
+        <p-listbox  
+        [options]="groupedFilterData" 
+        (onChange) = "onFilter()"
+        optionLabel="label"
+        optionValue="value"
+        [group]="true"
+        [(ngModel)]="selectedFilterData" 
+         [metaKeySelection]="false"
+          [checkbox]="true" 
+          [filter]="true" 
+          [multiple]="true" 
+          [listStyle]="{'max-height':'250px'}"
+           [style]="{'width':'15rem'}">
+            <ng-template let-group pTemplate="group">
+                <div class="flex align-items-center">
+                    <span>{{group.label}}</span>
+                </div>
+            </ng-template>
+        </p-listbox>
+    </p-overlayPanel> 
+    </div>
+    <p-overlayPanel #status>
+      <p-listbox #list 
+      [options]="listStatus" 
+      optionLabel="label" 
+      (click)="onListStatus($event.target.innerText)" >
+    </p-listbox>
+    </p-overlayPanel>
+    <p-overlayPanel #sideMenu>
+        <p-listbox #side
+        [options]="sideOption" 
+        optionLabel="label" 
+        (click)="onSideMenu($event.target.innerText)"
+        >
+        </p-listbox>
+
+      </p-overlayPanel>
+    
+    <p-overlayPanel #resources [showCloseIcon]="true"  >
+        <!-- <div id="resources" *ngFor = "let i of types , let n = index">
+            <button id="resourcesBtn" class="mr-2 btn btn-primary"   [style.background-color]="i.isActive ? 'violet' : 'white'">{{i.label}}</button>
+        </div> -->
+        <div style="height:auto; width: 350px;">
+            <div class="box" style="width: fit-content;" >
+                <button 
+                [ngClass] = "i.isActive ? 'btn btn-info' : 'btn btn-secondary'"
+                 style="margin:2px; border-radius: 8px;"
+                 (click)="onResourceSelect($event ,i)"
+                 *ngFor="let i of resourcesList">
+                 {{i.label}}
+                </button>  
+              </div>
+            <div>
+        </div>
+        <hr>
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="onResourceApply(this)"> Apply</button>
+            </div>
+    </p-overlayPanel>
+</div>
+<div style="margin-bottom: 10px;margin-top:20px;margin-right: 10px;">
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist" >
+      <button  
+      (click)="onStatusFilter($event,i)"
+      [ngClass]="isActive && 'active' "
+       class="nav-link"
+       id="nav-home-tab" 
+       data-bs-toggle="tab" 
+       data-bs-target="#nav-home"
+        type="button"
+        role="tab" 
+        aria-controls="nav-home"
+        aria-selected="true"
+        *ngFor = "let i of menus">
+        {{i.label}}
+        <span class="fnumbers">&nbsp;{{i.length}}&nbsp;</span>
+        </button>
+        
+
+    </div>
+  </nav>
+  </div>
+<p-table [columns]="columnSettings"   editMode="row" #dt [value]="menu ? projects : menu_filter_array"  dataKey="id" styleClass="p-datatable-sm" responsiveLayout="scroll"  [reorderableColumns]="true" [filterDelay]="0"  [paginator]="true" [rows]="projects.length" [rowsPerPageOptions]="[2,3,6]" totalRecords="6" pageLinks="3">
+
+    <ng-template pTemplate="header"  let-columns >
+        <tr >
+            <th>
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th style="width: 3rem"></th>
+            
+            <ng-container *ngFor="let col of columns ;let i = index" >
+                <th 
+            style="width: 3rem" 
+            
+            [pSortableColumn] = "col.field" 
+            [ngClass] ="{hide : !col.isVisible}"
+            [style] = "{'width': '4rem','max-width': '15rem'}">
+                {{col.header}}<p-sortIcon [field] ="col.field"></p-sortIcon>
+            </th>
+            </ng-container>
+            
+            <th style="width: 3rem"></th>
+            <th style="width: 3rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body"  let-editing="editing" let-rowData let-columns="columns">
+        <tr [pEditableRow]="rowData" >
+            <td>
+                <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+            </td>
+            <td>
+                 <button type="button" pButton pRipple [pRowToggler]="rowData" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-circle-right'"></button>
+            </td>
+                
+                
+            <ng-container *ngFor="let col of columns ;let i = index">
+            
+    
+                  <td pEditableColumn *ngIf = "col.type === 'number' && col.isVisible">
+                    <p-cellEditor [style]="{'width':'50px'}">
+                        <ng-template pTemplate="input" >
+                            <input  pInputText type="text" [(ngModel)]="rowData[col.field]" (keyup.enter)="onRowInlineEdit(rowData[col.field])" required /> 
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{rowData[col.field]}}
+                        </ng-template>
+                    </p-cellEditor>
+                    </td>
+                    <td pEditableColumn *ngIf = "col.type === 'string'  && col.isVisible" style="background-color: lightgray; border-radius: 4px;"  >
+                        <p-cellEditor [style]="{'width': '75px'}">
+                            <ng-template pTemplate="input" >
+                                <input  pInputText type="text" [(ngModel)]="rowData[col.field]"  (keydown.enter)="onRowInlineEdit(col.field,rowData)" required> 
+                            </ng-template>
+                            <ng-template pTemplate="output" >
+                                {{rowData[col.field]}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td *ngIf = "col.type === 'managerDetails' && col.isVisible ">
+                        <p-avatar
+                          
+                        image="{{rowData.ImageUrl}}"
+                        shape="circle"
+                        pTooltip="{{rowData[col.field]}}"
+                        tooltipPosition="bottom">
+                      </p-avatar>
+                    </td>
+
+                    <td *ngIf = "col.type === 'status'  && col.isVisible" [ngClass]="col.type" title="{{rowData[col.field]}}" (click)="status.toggle($event); onStatus(rowData)" >
+                        <span >• {{rowData[col.field]}}</span>
+                    </td>
+
+                    <td *ngIf = "col.type === 'date'  && col.isVisible ">
+                        {{rowData[col.field] | date:[date_format_value]}}
+                    </td>
+                        
+
+                    <td *ngIf = "col.type === 'array' && col.isVisible" >
+                        <div *ngIf = "rowData[col.field].length > 0; else applyResources" 
+                            (click)="resources.toggle($event); onStatus(rowData) ; onResourceClick(rowData);" style="text-align: center;">
+                            {{rowData[col.field].length}}
+                        </div>
+                        <ng-template #applyResources style="background-color: blue;">
+                         <i class="pi pi-plus"  (click)="resources.toggle($event); onStatus(rowData); onResourceClick(rowData); " ></i>
+                       </ng-template>
+                    </td>
+                
+                    <td style="display: inline-flexbox;justify-content: center;" *ngIf = "col.type === 'timeline'  && col.isVisible ">
+                  
+                        <div class="tdinline"  (click)="csactive();showUndoBtn(rowData.id)">
+                            {{rowData[col.field].startdate| date:[date_format_value] }}
+                            <span *ngIf="rowData[col.field].startdate.length == 0" [style.width]= "spanWidth">-</span>
+                             
+                        </div>
+                        <div class="tdinline" *ngIf="showBtn===rowData.id">
+                            <p-calendar [showButtonBar]="true" [touchUI]="true" [inline]="true" (onClearClick)="cl();csactive();csonch(rowData.id);" (onSelect)="onsch($event,rowData.id);csactive();" [ngClass]="msstatus ? 'cstart' : 'cstart inactive'">
+    
+                            </p-calendar>
+                        </div>
+                        <div class="tdinlinei">
+                            <i class="pi pi-angle-right"></i>
+                        </div>
+                        <!-- date:[date_format_value] -->
+                        <div class="tdinline" (click)="ceactive();showUndoBtn(rowData.id)">
+                            {{rowData[col.field].enddate|date:[date_format_value] }}
+                            <span *ngIf="rowData[col.field].enddate.length == 0" [style.width]= "spanWidth">-</span>
+                            
+                        </div>
+                        <!-- [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" -->
+                        <div class="tdinline" *ngIf="showBtn===rowData.id"><p-calendar [showButtonBar]="true" (onClearClick)="cl();ceactive();ceonch(rowData.id);" [touchUI]="true" [inline]="true" (onSelect)="onch($event,rowData.id);ceactive();" [ngClass]="mestatus ? 'cend' : 'cend inactive'"></p-calendar></div>
+                    </td>
+                    <td  pEditableColumn *ngIf = "col.type === 'currency' && col.isVisible ">
+                        <!-- <p-cellEditor [style]="{'width':'50px'}">
+                            <ng-template pTemplate="input" >
+                                <input  pInputText type="text" [(ngModel)]="rowData[col.field].amount" (keydown.enter)="onRowInlineEdit(col.field,rowData)" required /> 
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{rowData[col.field].amount |number: '2.' }} 
+                            </ng-template>
+                        </p-cellEditor>
+ -->
+
+
+
+                        <span *ngIf="amount_boolean; else elseBlock"> 
+                          <!-- {{rowData[col.field].amount |number: '2.' }} 
+ -->
+ <p-cellEditor [style]="{'width':'50px'}">
+    <ng-template pTemplate="input" >
+        <input  pInputText type="text" [(ngModel)]="rowData[col.field]" (keydown.enter)="onRowInlineEdit(col.field,rowData)" required /> 
+    </ng-template>
+    <ng-template pTemplate="output">
+        {{rowData[col.field]|number: '2.' }} 
+    </ng-template>
+</p-cellEditor>
+
+
+                        </span> 
+                        <ng-template #elseBlock>
+                          <p-cellEditor [style]="{'width':'50px'}">
+                            <ng-template pTemplate="input" >
+                                <input  pInputText type="text" [(ngModel)]="rowData[col.field]" (keydown.enter)="onRowInlineEdit(col.field,rowData)" required />
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ rowData[col.field]| thousandPipe : 2 }}
+                            </ng-template>
+                        </p-cellEditor>
+                            </ng-template> 
+                        
+    
+                    </td>
+    
+            </ng-container>
+
+            <td style="text-align:center">
+                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(rowData)" class="p-button-rounded p-button-text"></button>
+                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(rowData)" class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(flight, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+            </td>
+            <td>
+                <i class="pi pi-ellipsis-v" style="font-size: 1rem" (click)="onStatus(rowData); sideMenu.toggle($event)"></i>
+
+            </td>
+            <!-- </div> -->
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-rowData>
+
+        <tr>
+            <td colspan="7">
+                <div class="p-p-3" style="margin-left: 70px;">
+               
+                  
+                        <p-timeline [value]="rowData.traker">
+                            <ng-template pTemplate="content" let-event>
+                               Roya has  {{event.operation}} {{event.field}} to {{event.value}}
+                               @ {{event.date}} {{event.time}}
+                            </ng-template>
+                        </p-timeline>
+                    </div>
+                
+            </td>
+        </tr>
+    
+    </ng-template>
+  </p-table>
+
+
+
+
+
+
+  

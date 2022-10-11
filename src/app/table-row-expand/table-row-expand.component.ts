@@ -2,15 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ProductService } from '../product.service';
 import _, { map } from 'underscore';
-import { timeStamp } from 'console';
+import { DatePipe } from '@angular/common'
+import {PaginatorModule} from 'primeng/paginator';
+// import { timeStamp } from 'console';
+import { AvatarModule } from "primeng/avatar";
+import {TooltipModule} from 'primeng/tooltip';
 
 
 @Component({
   selector: 'app-table-row-expand',
   templateUrl: './table-row-expand.component.html',
-  styleUrls: ['./table-row-expand.component.css']
+  styleUrls: ['./table-row-expand.component.css'],
+  providers: [DatePipe,PaginatorModule,AvatarModule,TooltipModule]
 })
 export class TableRowExpandComponent implements OnInit {
+  msstatus: boolean = false;
+  mestatus: boolean = false;
+
+  showBtn=-1;
 
   loading: boolean = true;
   groupedFilterData: any = [];
@@ -39,13 +48,29 @@ amount_boolean = true;
 
   //menus -> Used for Tab Menu
   menus = [
-      {label: 'All', icon: 'pi pi-fw pi-home' ,isActive:true,length:7},
-      {label: 'OnHold', icon: 'pi pi-fw pi-calendar',isActive:false,length:3},
+      {label: 'All', icon: 'pi pi-fw pi-home' ,isActive:true,length:6},
+      {label: 'OnHold', icon: 'pi pi-fw pi-calendar',isActive:false,length:1},
       {label: 'Risk', icon: 'pi pi-fw pi-calendar',isActive:true,length:3},
-      {label: 'Ontrack', icon: 'pi pi-fw pi-pencil',isActive:false,length:2},
-      {label: 'Potential Risk', icon: 'pi pi-fw pi-file',isActive:false,length:2},
+      {label: 'Ontrack', icon: 'pi pi-fw pi-pencil',isActive:false,length:1},
+      {label: 'Potential Risk', icon: 'pi pi-fw pi-file',isActive:false,length:1},
     
   ];
+
+
+  //map set
+  
+  columnsetings=[
+    {"header":"id","field":'pname',"type":"string"},
+    {"header":"id","field":'id',"type":"statusstring"},
+    {"header":"id","field":'id',"type":"date"},
+    {"header":"from","field":'from',"type":"date"},
+    {"header":"to","field":'to',"type":"date"},
+    {"header":"recievedDate","field":'redate',"type":"date"},
+  ]
+
+  //map set
+
+  
 
   //types -> Checkbox
   types = [
@@ -55,6 +80,7 @@ amount_boolean = true;
     {label:'Last Update',value:'lastUpdate',isActive:true},
     {label:'Resources',value:'resources',isActive:true},
     {label:'Project Timeline',value:'projectTimeLine',isActive:true},
+    {label:'startdate',value:'startdate',isActive:true},
     {label:'Estimation',value:'estimation',isActive:true},
   ];
 
@@ -107,22 +133,151 @@ this.menu_filter_array =  [...this.columnFilteredData]
 console.log('CFD',this.columnFilteredData)
 console.log(this.menu_filter_array)
 }}
+
+
+  //  mcode
+  cl(){
+    console.log("hei")
+  }
+  csactive() {
+    console.log("hi");
+    this.msstatus = !this.msstatus;
+  }
+  ceactive() {
+    console.log("hi");
+    this.mestatus = !this.mestatus;
+  }
+
+  showUndoBtn(index){
+    console.log(index);
+    this.showBtn=index;
+  }
+
+  //new
+
+  ceonch(id) {
+    console.log(id);
+    this.cemyFunction(id)
+  }
+
+  cemyFunction(id) {
+    // this.cdate=new Date();
+    // let latest_date = this.datepipe.transform(valued, 'yyyy-MM-dd');
+    // console.log(latest_date);
+    // const index: number = this.tmdata.indexOf(id);
+    const newArr = this.projects.map(obj => {
+      if (obj.id === id) {
+        return { ...obj, enddate: "" };
+      }
+
+      return obj;
+    });
+    // console.log(index,id)
+    console.log(newArr)
+    this.projects = newArr
+  }
+  csonch(id) {
+    console.log(id);
+    this.csmyFunction(id)
+  }
+
+  csmyFunction(id) {
+    // this.cdate=new Date();
+    // let latest_date = this.datepipe.transform(valued, 'yyyy-MM-dd');
+    // console.log(latest_date);
+    // const index: number = this.tmdata.indexOf(id);
+    const newArr = this.projects.map(obj => {
+      if (obj.id === id) {
+        return { ...obj, startdate: "" };
+      }
+
+      return obj;
+    });
+    // console.log(index,id)
+    console.log(newArr)
+    this.projects = newArr
+  }
+
+  //new
+
+
+  onch(valued, id) {
+    console.log(valued, id);
+    this.myFunction(valued, id)
+  }
+  onsch(valued, id) {
+    console.log(valued, id);
+    this.mysFunction(valued, id)
+  }
+  mysFunction(valued, id) {
+    // this.cdate=new Date();
+    let latest_date = this.datepipe.transform(valued, 'yyyy-MM-dd');
+    console.log(latest_date);
+    // const index: number = this.tmdata.indexOf(id);
+    const newArr = this.projects.map(obj => {
+      if (obj.id === id) {
+        if(latest_date > obj.enddate) {
+          console.log("soe");
+          alert("start date need to be lesser than end date");
+
+          return { ...obj, startdate: obj.startdate };
+        }
+        return { ...obj, startdate: latest_date };
+      }
+
+      return obj;
+    });
+    // console.log(index,id)
+    console.log(newArr)
+    this.projects = newArr
+  }
+  t(event:any){
+    console.log("hi");
+  }
+  myFunction(valued, id) {
+    // this.cdate=new Date();
+    let latest_date = this.datepipe.transform(valued, 'yyyy-MM-dd');
+    console.log(latest_date);
+    // const index: number = this.tmdata.indexOf(id);
+    const newArr = this.projects.map(obj => {
+      if (obj.id === id) {
+        if(latest_date < obj.startdate) {
+          alert("End date need to be bigger then start date");
+
+          return { ...obj, enddate: obj.enddate };
+        }
+        return { ...obj, enddate: latest_date };
+      }
+
+      return obj;
+    });
+    // console.log(index,id)
+    console.log(newArr)
+    this.projects = newArr
+  }
+  // mcode
+
+
 // products: Product[];
 // groupFilter = [{}]
-constructor(private productService: ProductService){
+constructor(private productService: ProductService, public datepipe: DatePipe){
   this.projects = [
     {
     "id": 1,
+    "style": "color: red; background-color: white;",
+    "class": "string",
+    "ManagerImgs":"/assets/images/user2.jpg",
     "projectName":"Kaar Tech",
     "Manager":"Jeevan",
     "status":"Risk",
     "lastUpdate": "Tue Sep 27 2022 10:55:55 GMT+0530 (India Standard Time)",
     "resources": '',
     "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
-    "projectTimeLine": {
-      "fromDate" : "Tue Sep 28 2022 10:55:55 GMT+0530 (India Standard Time)",
-      "ToDate" : "Tue Sep 30 2022 10:55:55 GMT+0530 (India Standard Time)"
-    },
+    // "projectTimeLine": {
+    //   "fromDate" : "Tue Sep 28 2022 10:55:55 GMT+0530 (India Standard Time)",
+    //   "ToDate" : "Tue Sep 30 2022 10:55:55 GMT+0530 (India Standard Time)"
+    // },
+    "startdate": "14 jan 2001", "enddate": "15 feb 2002",
     "estimation" : {
       "amount":10600,
       "currency":"US$"
@@ -141,13 +296,14 @@ constructor(private productService: ProductService){
   {
     "id":2,
     "type":"string",
+    "ManagerImgs":"/assets/images/user2.jpg",
     "projectName":"Daimler",
     "Manager":"Jeevan",
     "status":"Ontrack",
     "lastUpdate": "Tue Sep 27 2022 10:55:55 GMT+0530 (India Standard Time)",
     "resources": 3,
     "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
-    "projectTimeLine": " 15 May 2022 ",
+    "startdate": "16 mar 2003", "enddate": "",
     "estimation" : {
       "amount":10700,
       "currency":"US$"
@@ -167,13 +323,14 @@ constructor(private productService: ProductService){
   {
     "id":3,
     "type":"string",
+    "ManagerImgs":"/assets/images/mlogo.png",
     "projectName":"Dell",
     "Manager":"Mohan Das",
     "status":"OnHold",
     "lastUpdate": "Tue Sep 27 2022 10:55:55 GMT+0530 (India Standard Time)",
     "resources": 3,
     "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
-    "projectTimeLine": " 15 May 2022 ",
+    "startdate": "18 feb 2020", "enddate": "14 mar 2001",
     "estimation" : {
       "amount":10500,
       "currency":"US$"
@@ -191,13 +348,16 @@ constructor(private productService: ProductService){
   },
   {
     "id":4,
+    "class": "string",
+    "ManagerImgs":"https://www.w3schools.com/images/w3schools_green.jpg",
     "projectName":"Almas Tofech",
     "Manager":"Ravi",
     "status":"Potential Risk",
     "lastUpdate": "Tue Sep 27 2022 10:55:55 GMT+0530 (India Standard Time)",
     "resources": 3,
     "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
-    "projectTimeLine": " 15 May 2022 > 17 Aug 2023",
+    // "projectTimeLine": " 15 May 2022 > 17 Aug 2023",
+    "startdate": "", "enddate": "",
     "estimation" : {
       "amount":10800,
       "currency":"US$"
@@ -217,13 +377,14 @@ constructor(private productService: ProductService){
   },
   {
     "id":5,
+    "ManagerImgs":"/assets/images/user1.jfif",
     "projectName":"Al Bid Info Tech",
     "Manager":"Gopal Das",
     "status":"Risk",
     "lastUpdate": "Tue Sep 27 2022 10:55:55 GMT+0530 (India Standard Time)",
     "resources": 3,
     "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
-    "projectTimeLine": "15 May 2022 > 17 Aug 2023",
+    "startdate": "14 jan 2001", "enddate": "14 mar 2001",
     "estimation" : {
       "amount":10900,
       "currency":"US$"
@@ -245,13 +406,14 @@ constructor(private productService: ProductService){
   },
   {
     "id": 6,
+    "ManagerImgs":"/assets/images/user2.jpg",
     "projectName": "Al Rias",
     "Manager":"Jeevan",
     "status":"Risk",
     "lastUpdate": "Tue Mar 28 2022 10:55:55 GMT+0530 (India Standard Time)",
     "resources": 3,
     "resources_alloted":["UI designer","Front End Developer","Back End Developer"],
-    "projectTimeLine": "15 May 2022 > 17 Aug 2023",
+    "startdate": "14 jan 2001", "enddate": "14 mar 2001",
     "estimation" : {
       "amount":10200,
       "currency":"US$"
