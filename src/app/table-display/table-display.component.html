@@ -1,21 +1,23 @@
 <p-toast position="top-right"></p-toast>
-
-<div  style="display: flex;">
-    <button  id="btn1" style="margin-right: 20px;" pButton type="button" (click)="op.toggle($event)" icon="pi pi-table" ></button>
-    <div class="col-md-4">
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<div class="card">
+<p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+        <button  id="btn1" style="margin-right: 20px;" pButton type="button" (click)="op.toggle($event)" icon="pi pi-table" ></button>
         <button  id="btn1" pButton type="button" (click)="mf.toggle($event) ;" icon="pi pi-filter" ></button>
         <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" />
         </span>
-    </div>
-    <button class='btn btn-success pull-right' style="margin-left: 900px ;" (click)="onSaveProject()">
-        Save
-    </button>
+    
+    </ng-template>
 
-    <!-- <button pButton type="button">New Project</button> -->
 
-</div>
+    <ng-template pTemplate="right">
+                      <button style="margin-right: 20px;" class="btn btn-success">Save</button>
+                      <button pButton pRipple [label]="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProjects()" [disabled]="!selectedProjects || !selectedProjects.length"></button>
+    </ng-template>
+</p-toolbar></div>
 
 <div class="ui-g ui-fluid">
 
@@ -23,7 +25,7 @@
         <p-overlayPanel [showTransitionOptions]="'1ms'" [hideTransitionOptions]="'1ms'" #op [dismissable]="true" [style]="{width: 'auto', height: 'auto'}" >
             
             <h6>Table Column</h6> 
-            <div class="btn-group" *ngFor = "let i of types , let n = index">
+            <div class="btn-group" *ngFor = "let i of columnSettings , let n = index">
            <button   
            class="mr-2 btn"     
            [ngClass]="{ 'btn-primary': i.isVisible,
@@ -53,8 +55,8 @@
           <hr>
     
           <div class="flex-end">
-            <button class=" mr-2 btn btn-info" (click)="onSettingsReset()">Reset</button>
-            <button class=" mr-2 btn btn-success" (click)="onSettingsSave()">Save</button>
+            <button class=" mr-2 btn btn-info" (click)="onSettingsReset(); op.hide()">Reset</button>
+            <button class=" mr-2 btn btn-success" (click)="onSettingsSave(); op.hide()">Save</button>
           </div>
     
         </p-overlayPanel>
@@ -67,6 +69,7 @@
         optionLabel="label"
         optionValue="value"
         [group]="true"
+
         [(ngModel)]="selectedFilterData" 
          [metaKeySelection]="false"
           [checkbox]="true" 
@@ -145,7 +148,7 @@
     </div>
   </nav>
   </div>
-<p-table [columns]="columnSettings"   editMode="row" #dt [value]="menu ? projects : menu_filter_array"  dataKey="id" styleClass="p-datatable-sm" responsiveLayout="scroll"  [reorderableColumns]="true" [filterDelay]="0"  [paginator]="true" [rows]="projects.length" [rowsPerPageOptions]="[2,3,6]" totalRecords="6" pageLinks="3">
+<p-table [columns]="columnSettings"  [(selection)]="selectedProjects" editMode="row" #dt [value]="menu ? projects : menu_filter_array"  dataKey="id"  responsiveLayout="scroll"  [reorderableColumns]="true" [filterDelay]="0"  [paginator]="true" [rows]="projects.length" [rowsPerPageOptions]="[2,3,6]" totalRecords="6" pageLinks="3">
 
     <ng-template pTemplate="header"  let-columns >
         <tr >
@@ -156,7 +159,7 @@
             
             <ng-container *ngFor="let col of columns ;let i = index" >
                 <th 
-            style="width: 3rem" 
+                style="width: 3rem"
             
             [pSortableColumn] = "col.field" 
             [ngClass] ="{hide : !col.isVisible}"
@@ -182,8 +185,8 @@
             <ng-container *ngFor="let col of columns ;let i = index">
             
     
-                  <td pEditableColumn *ngIf = "col.type === 'number' && col.isVisible">
-                    <p-cellEditor [style]="{'width':'50px'}">
+                  <td  pEditableColumn *ngIf = "col.type === 'number' && col.isVisible">
+                    <p-cellEditor style="width:2rem">
                         <ng-template pTemplate="input" >
                             <input  pInputText type="text" [(ngModel)]="rowData[col.field]" (keyup.enter)="onRowInlineEdit(rowData[col.field])" required /> 
                         </ng-template>
@@ -192,7 +195,7 @@
                         </ng-template>
                     </p-cellEditor>
                     </td>
-                    <td pEditableColumn *ngIf = "col.type === 'string'  && col.isVisible" style="background-color: lightgray; border-radius: 4px;"  >
+                    <td style="width: 3rem" pEditableColumn *ngIf = "col.type === 'string'  && col.isVisible" style="border-radius: 4px; width: 2rem;"  >
                         <p-cellEditor [style]="{'width': '75px'}">
                             <ng-template pTemplate="input" >
                                 <input  pInputText type="text" [(ngModel)]="rowData[col.field]"  (keydown.enter)="onRowInlineEdit(col.field,rowData)" required> 
@@ -330,9 +333,6 @@
     
     </ng-template>
   </p-table>
-
-
-
 
 
 

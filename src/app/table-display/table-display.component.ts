@@ -1,23 +1,21 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { ProductService } from "../product.service";
 import _, { map } from "underscore";
 import { ProjectsService } from "../projects.service";
 import { DatePipe } from "@angular/common";
 import { Observable } from "rxjs";
 import { MasterData } from "../project";
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
-import { runInThisContext } from "vm";
-import { MessageService } from 'primeng/api';
-import { debug } from "console";
+import { MessageService, ConfirmationService } from 'primeng/api';
 @Component({
   selector: "app-table-display",
   templateUrl: "./table-display.component.html",
   styleUrls: ["./table-display.component.css"],
-  providers: [DatePipe,MessageService],
+  providers: [DatePipe,MessageService,ConfirmationService],
 })
 export class TableDisplayComponent implements OnInit {
   projects: any = [];
+  selectedProjects : any = [];
+  rowData = {};
   spanWidth = '75px'
 
   loading: boolean = true;
@@ -49,7 +47,7 @@ export class TableDisplayComponent implements OnInit {
     {"label":"Send Mail","value":"Send Mail"},
     {"label":"Details","value":"Details"},
     {"label":"Archive","value":"Archive"},
-    {"label":"Details","value":"Details"}
+    {"label":"Delete","value":"Delete"}
   ]
   types = [];
   //projects -> List of project details
@@ -67,8 +65,8 @@ export class TableDisplayComponent implements OnInit {
   date_boolean = false;
   amount_boolean = true;
 
-  columnSettings: [];
-  copyColumneSettings: []
+  columnSettings = [];
+  copyColumnSettings = []
   msstatus: any;
   mestatus: any;
   calendarDates = [];
@@ -78,10 +76,13 @@ export class TableDisplayComponent implements OnInit {
   menu = true
   statusId = 0;
   masterData: Observable<MasterData[]>;
+
+  backend = {}
   constructor(
     private messageService: MessageService,
     public datepipe: DatePipe,
     private projectService: ProjectsService,
+    private confirmationService : ConfirmationService
   
   ) {
     this.newArr = this.types.filter(function (record) {
@@ -97,8 +98,17 @@ export class TableDisplayComponent implements OnInit {
   
     this.projectService.getBacked().subscribe((datas) => {
       // this.projects = datas["data"];
-      this.copyColumneSettings = datas["settings"];
-      this.columnSettings = datas["settings"];
+      let settings = datas["settings"];
+      // this.copyColumnSettings = [...datas["settings"]];
+      this.copyColumnSettings = JSON.parse(JSON.stringify(datas["settings"]))
+      debugger
+      console.log(this.copyColumnSettings)
+      // this.copyColumnSettings[0]["isVisible"] = false
+      this.columnSettings = [...datas["settings"]];
+      console.log('ccs',this.copyColumnSettings)
+      console.log('ccd',this.columnSettings)
+      // this.copyColumnSettings =  _.map(settings, _.clone);
+      // this.columnSettings  = _.map(settings, _.clone);
       this.tableFilters = datas["tableFilters"];
       this.resourcesList = datas["resourcesList"];
       this.date_format_type = datas["date_format"];
@@ -111,12 +121,12 @@ export class TableDisplayComponent implements OnInit {
       this.account_value = datas["account_value"];
       this.copy_account_value = datas["account_value"]
 
-      // this.copyColumneSettings = datas["settings"];
+      // this.copyColumnSettings = datas["settings"];
 
       this.loadMenu(this.menu_array);
 
       this.loadStatus(this.menu_array);
-      this.types = [...this.columnSettings];
+      // this.types = [...this.columnSettings]; // model (buttons)
 
   
       this.lodaTableFilters(this.projects, this.tableFilters);
@@ -202,9 +212,13 @@ console.log('CF',this.curatedFilters)
   onSideMenu(event){
     console.log(event)
    if(event === 'Archive'){
-     this.onArchive()
+     this.onArchive();
+   } 
+   if(event === 'Delete'){
+     this.onDelete();
    }
   }
+
 onArchive(){
   console.log(this.statusId, 'Archive')
   var obj = {}
@@ -295,56 +309,20 @@ onArchive(){
     }
   }
   //Function to filter the list of columns which are active and to be displayed
-  onColumnOrder(event, data, cl) {
-  let columnObject = {};
-  let columnType = {}
-  let obj={}
-    for(let i=0;i<this.columnSettings.length;i++){
-    columnObject = this.columnSettings[i]
-    columnType = this.types[i]
-      if( (columnObject["header"] === data["header"]) && (data.isVisible === false)){
-
-      columnObject["isVisible"] = true
-      columnType["isVisible"] = true
-      return;
-
-
-      }
-       if( (columnObject["header"] === data["header"]) && (data.isVisible === true)){
-        console.log(this.copyColumneSettings)
-        columnObject["isVisible"] = false
-        columnType["isVisible"] = false
-        // console.log(this.copyColumneSettings)
-        // console.log(columnObject)
-        // console.log(this.types)
-  return
-        }
-
-    }
+  onColumnOrder(event,data,cl) {
+    console.log("Before",data)
+   if(data.isVisible===false){
+     data.isVisible = true
+   } else {
+     data.isVisible = false
+   }
+   console.log("After",data)
+   console.log('After',this.columnSettings)
+   console.log(this.copyColumnSettings)
   }
   
   
  
-    onSettingsSave(){
-      var body = {}
-      body["settings"] = this.types,
-      body["tableFilters"]= this.tableFilters;
-      body["resourcesList"] = this.resourcesList;
-      body["date_format"] = this.date_format_type;
-      body["account"] = this.account;
-      body["status"] = this.menu_array;
-      body["date_format_value"] = this.date_format_value;
-      body["account_value"] = this.account_value
-      this.projectService.updateSetings(body)
-      this.messageService.add({severity:'success', summary: 'Success', detail:'Saved Successfully'});
-     this.dismiss = true
-    }
-    onSettingsReset(){
-      console.log(this.copyColumneSettings)
-      
-      this.date_format_value = this.copy_date_format_value,
-      this.account_value  = this.copy_account_value
-    }
   
   onStatusFilter(event, i) {
 
@@ -373,6 +351,7 @@ onArchive(){
   }
   statusUpdate = "";
   onStatus(info) {
+    this.rowData = info;
     this.statusId = info.id;
     console.log("This Status", this.statusId);
     let sampleData = _.uniq(_.pluck(this.projects, "resources_alloted"));
@@ -509,11 +488,74 @@ onArchive(){
    console.log(this.projects)
    this.lodaTableFilters(this.projects,this.tableFilters)
  }
+ //Table Settings 
+ onSettingsSave(){
+  var body = {}
+  body["settings"] = this.columnSettings,
+  body["tableFilters"]= this.tableFilters;
+  body["resourcesList"] = this.resourcesList;
+  body["date_format"] = this.date_format_type;
+  body["account"] = this.account;
+  body["status"] = this.menu_array;
+  body["date_format_value"] = this.date_format_value;
+  body["account_value"] = this.account_value
+  this.projectService.updateSetings(body)
+  this.messageService.add({severity:'success', summary: 'Success', detail:'Saved Successfully'});
+ this.dismiss = true
+}
+onSettingsReset(){
+  this.confirmationService.confirm({
+    message: 'Are you sure you want to reset the settings?',
+    header: 'Confirm',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+      let objectArray = []
+
+      this.columnSettings.forEach((ele) =>{
+      ele.isVisible = true
+      })
+    
+      this.date_format_value = this.date_format_type[0].value
+      this.account_value  = this.account[0].value
+      this.messageService.add({severity:'success', summary: 'Successful', detail: 'Settings Reset Done Successfully', life: 3000});
+    }
+});
+}
+// Save - > whole data of project
 onSaveProject(){
   console.log(this.projects)
   this.projectService.updateWholeData(this.projects)
   this.loadData()
   this.messageService.add({severity:'success', summary: 'Success', detail:'Saved Successfully'});
 
+}
+deleteSelectedProjects(){
+  console.log('Selected Projects',this.selectedProjects)
+  this.confirmationService.confirm({
+    message: 'Are you sure you want to delete the selected projects?',
+    header: 'Confirm',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+        this.projects = this.projects.filter(val => !this.selectedProjects.includes(val));
+        this.selectedProjects = null;
+        this.messageService.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});
+         this.loadMenu(this.menu_array)
+      }
+});
+
+}
+onDelete(){
+
+  this.confirmationService.confirm({
+    message: 'Are you sure you want to delete ' + this.rowData["projectName"] + '?',
+    header: 'Confirm',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+        this.projects = this.projects.filter(val => val.id !== this.rowData["id"]);
+        
+        this.messageService.add({severity:'success', summary: 'Successful', detail: 'Product Deleted', life: 3000});
+        this.loadMenu(this.menu_array)  
+      }
+});  
 }
 }

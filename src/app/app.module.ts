@@ -30,7 +30,7 @@ import {CascadeSelectModule} from 'primeng/cascadeselect';
 // import { TabMenuComponent } from './tab-menu/tab-menu.component';
 // import { FilterComponent } from './filter/filter.component';
 // import {TabMenuModule} from 'primeng/tabmenu';
-import {MenuItem} from 'primeng/api';
+// import {MenuItem} from 'primeng/api';
 import { CustomerService } from './customer.service';
 import {ListboxModule} from 'primeng/listbox';
 // import { TreeSelectComponent } from './tree-select/tree-select.component'; 
@@ -44,7 +44,8 @@ import {AvatarModule} from 'primeng/avatar';
 
 import {DialogModule} from 'primeng/dialog';
 import { TableCheckComponent } from './table-check/table-check.component';
-
+import {ToolbarModule} from 'primeng/toolbar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +53,8 @@ import { TableCheckComponent } from './table-check/table-check.component';
     MenuItemContent,
     ThousandPipePipe,
     TableDisplayComponent,
-    TableCheckComponent
+    TableCheckComponent,
+  
   ],
   imports: [
     BrowserModule,
@@ -82,7 +84,9 @@ import { TableCheckComponent } from './table-check/table-check.component';
     CalendarModule,
     TooltipModule,
     AvatarModule,
-    DialogModule
+    DialogModule,
+    ToolbarModule,
+    ConfirmDialogModule
 
   ],
   providers: [FilterService, ProductService , PrimeNGConfig,MessageService , CustomerService],
