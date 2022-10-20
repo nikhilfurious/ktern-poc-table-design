@@ -1,5 +1,5 @@
-    <app-table-display></app-table-display>
-    
+    <!-- <app-table-display></app-table-display>
+     -->
 
     
   <!-- <app-table-row-expand></app-table-row-expand> -->
@@ -18,4 +18,16 @@
 <!-- <app-tab-menu></app-tab-menu> -->
 <!-- <app-tree-select></app-tree-select> -->
 <!-- <app-calendar></app-calendar> -->
+<!-- <div>
+  <h2>Hello World</h2>
+</div> -->
+
+<div style="display: flex; flex-direction: row;padding: 20px">
+  <a [routerLink]="['expand']" style="padding: 10px">home</a>
+  <br>
+  <a [routerLink]="['table-display']" style="padding: 10px">table display</a>
+  <br>
+  <a [routerLink]="['table-check']" style="padding: 10px">Check</a>
+</div>
+
 <router-outlet></router-outlet>

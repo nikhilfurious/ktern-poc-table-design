@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Customer } from './customer';
 import { MasterData } from './project';
 
 @Injectable({
@@ -57,11 +58,19 @@ updateWholeData(content){
 
 
   loadAll() {
-    this.http.get<MasterData[]>(this.url + 'data').subscribe(data => {
-      this.dataStore.masterData= data;
-      this._projects.next(Object.assign({}, this.dataStore).masterData);
-      console.log(this.cast)
-    }, error => console.log('Could not load todos.'));
+    debugger
+    return this.http.get<any>(this.url + 'data')
+    .toPromise()
+    .then(res => <MasterData[]>res.data)
+    .then(data =>{return data;});
   }
+
+  
+  getCustomersLarge() {
+    return this.http.get<any>('assets/customers-large.json')
+        .toPromise()
+        .then(res => <Customer[]>res.data)
+        .then(data => { return data; });
+}
 
 }

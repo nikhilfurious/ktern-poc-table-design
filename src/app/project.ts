@@ -5,5 +5,6 @@ export interface MasterData {
     ImageUrl?:string,
     status?:string,
     lastUpdate?:string,
-  
+   acrhive?:number,
+   
 }

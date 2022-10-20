@@ -17,6 +17,7 @@
   color: crimson;
   padding: 2px;
   background-color: lightpink;
+  cursor: pointer;
 }
 
 /* .statusstring[title~=Ontrack]{
@@ -26,17 +27,39 @@
   color: green;
   padding: 2px;
   background-color: lightgreen;
+  cursor: pointer;
 }
 
 .statusstring[title~=OnHold] span{
   color: dodgerblue;
   padding: 2px;
   background-color: lightblue;
+  cursor: pointer;
 }
 .statusstring{
   padding: 10px;
+  cursor: pointer;
+}
+.trackerFieldClass{
+  color: dodgerblue;
+  padding: 2px;
+  border-radius: 4px;
+  background-color: lightblue; 
 }
 
+.trackerValueClass{
+  color: green;
+  padding: 2px;
+  background-color: lightgreen;
+  cursor: pointer;
+}
+/* td {
+  border: 1px solid red;
+} */
+
+/* tr:hover {
+  box-shadow: 2px 2px 15px -2px rgba(180, 3, 100, 0.973);
+} */
 /* .statusstring:before {
   content:"• ";
 } */
@@ -64,10 +87,10 @@
   border-radius: 3px;
   z-index: 2;
 }
-.ui-datepicker.ui-widget .ui-datepicker-calendar td a.ui-state-active {
+/* .ui-datepicker.ui-widget .ui-datepicker-calendar td a.ui-state-active {
   background-color: #186ba0;
   color: #ffffff;
-}
+} */
 
 .number{
   color: blue;
@@ -83,34 +106,44 @@
 
 
 .tdinline {
-  display: inline-flex;
-  align-items: center;
-  align-content: center;
   background-color: aliceblue;
   color: blue;
   border-radius: 5px;
-  text-align: center;
-  justify-content: center;
+  display: inline-block;
+  margin-right: 10px; min-width: 80px; text-align: center;
+  cursor: pointer;
+}
+
+.tdinline-left {
+  background-color: aliceblue;
+  color: blue;
+  border-radius: 5px;
+  display: inline-block;
+  margin-left: 10px; min-width: 80px; text-align: center;
+  cursor: pointer;
 }
 .tdinlinei {
-  display: inline;
-  align-items: center;
-  align-content: center;
+  display: inline-block;
   color: blue;
   text-align: center;
+  
 }
 #std{
   /* text-align: center; */
   color: #000;
+}
+
+#std div:nth-child(even){
+  /* min-width: 30%; */
+  text-align: center;
 }
 #std div:nth-child(odd){
   text-align: center;
   align-content: center;
   align-items: center;
   justify-content: center;
-  min-width: 43%;
+  /* min-width: 43%; */
 }
-
 .cend.inactive {
   display: none;
 }
@@ -146,10 +179,6 @@
 
 
 /* mcss */
-.flex-end {
-  display: flex;
-  justify-content: flex-end;
-}
 
 .purple {
   background-color: blue;
@@ -159,9 +188,9 @@
   background-color: grey;
 }
 
-th {
+/* th {
   width: "3rem"
-}
+} */
 
 .p-checkbox,
 .p-checkbox-box {
@@ -209,8 +238,10 @@ th {
   padding: 0.5rem 0.5rem;
   background: #add8e6;
   color: #000;
+  font-size: smaller;
   /* --bs-link-hover-color: #a52a2a; */
 }
+
 
 #resources {
 
@@ -227,6 +258,7 @@ th {
   flex: none;
   order: 1;
   flex-grow: 0;
+  cursor: pointer;
 }
 
 #resourcesBtn {
@@ -345,6 +377,7 @@ th {
 :host ::ng-deep .p-cell-editing {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
+  width: auto;  
 }
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   position: -webkit-sticky;
@@ -352,6 +385,10 @@ th {
   top: 0px;
 }
 
+/* :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+  padding: 0.5rem 0.5rem;
+  width: 100%;
+} */
 @media screen and (max-width: 64em) {
   :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
       top: 0px;
@@ -365,4 +402,27 @@ th {
   color: crimson;
   padding: 2px;
   background-color: lightsalmon;
+}
+
+.timeLineTh{
+  width : 15rem
+}
+
+.estimationStyle{
+  width: 5rem;
+  max-width: 10rem;
+}
+
+.p-inputtext {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 1rem;
+  color: #495057;
+  background: #fff;
+  padding: 0.5rem 0.5rem;
+  border: 1px solid #ced4da;
+  width: 100%;
+
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 3px;
 }

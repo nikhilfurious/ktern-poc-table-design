@@ -2,7 +2,6 @@
 @import  "~primeng/resources/primeng.min.css";
 @import  "~primeflex/primeflex.css";
 @import "~bootstrap/dist/css/bootstrap.css";
-@import "~ng-zorro-antd/ng-zorro-antd.min.css";
 
 /* body .ui-selectbutton .ui-button {
     background-color: #dadada;
@@ -47,9 +46,7 @@
     border-radius: 25px;
     box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%);
 }
-table{
-    font-size: 12px;
-}
+
 
 ::ng-deep .p-calendar .p-datepicker-touch-ui, .p-datepicker-touch-ui {
 

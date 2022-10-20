@@ -16,7 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {TabMenuModule} from 'primeng/tabmenu';
-import { TableRowExpandComponent } from './table-row-expand/table-row-expand.component';
+// import { TableRowExpandComponent } from './table-row-expand/table-row-expand.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FilterService, MessageService, PrimeNGConfig } from 'primeng/api';
 import { ProductService } from './product.service';
@@ -43,17 +43,23 @@ import {TooltipModule} from 'primeng/tooltip';
 import {AvatarModule} from 'primeng/avatar';
 
 import {DialogModule} from 'primeng/dialog';
-import { TableCheckComponent } from './table-check/table-check.component';
+// import { TableCheckComponent } from './table-check/table-check.component';
 import {ToolbarModule} from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {InputTextareaModule} from 'primeng/inputtextarea';
+import { OverlayPanel } from 'primeng/overlaypanel';
+import { CanExitGuard } from './can-exit.guard';
+// import { ContactComponent } from './contact/contact.component';
+
 @NgModule({
   declarations: [
     AppComponent,
-    TableRowExpandComponent,
+    // TableRowExpandComponent,
     MenuItemContent,
     ThousandPipePipe,
     TableDisplayComponent,
-    TableCheckComponent,
+    // TableCheckComponent,
+    // ContactComponent
   
   ],
   imports: [
@@ -86,10 +92,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     AvatarModule,
     DialogModule,
     ToolbarModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    InputTextareaModule,
+
 
   ],
-  providers: [FilterService, ProductService , PrimeNGConfig,MessageService , CustomerService],
+  providers: [FilterService, ProductService , PrimeNGConfig,MessageService , CustomerService ,CanExitGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

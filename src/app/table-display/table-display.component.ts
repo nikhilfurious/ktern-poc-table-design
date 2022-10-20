@@ -1,19 +1,29 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, ElementRef} from "@angular/core";
 import _, { map } from "underscore";
 import { ProjectsService } from "../projects.service";
-import { DatePipe } from "@angular/common";
+import { DatePipe, PlatformLocation } from "@angular/common";
 import { Observable } from "rxjs";
 import { MasterData } from "../project";
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { OverlayPanelModule } from "primeng/overlaypanel";
+import { CanExit } from './../can-exit.guard';
+interface Book {
+  name: String,
+  author: String,
+  year: Number
+}
 @Component({
   selector: "app-table-display",
   templateUrl: "./table-display.component.html",
   styleUrls: ["./table-display.component.css"],
-  providers: [DatePipe,MessageService,ConfirmationService],
+  providers: [DatePipe,MessageService,ConfirmationService,OverlayPanelModule],
 })
-export class TableDisplayComponent implements OnInit {
+export class TableDisplayComponent implements OnInit, CanExit {
+  books: Book[] = [];
+  @ViewChild('dateCalendar' ,{static: false}) datePicker: any;
   projects: any = [];
+  copyProjects : any = [];
   selectedProjects : any = [];
   rowData = {};
   spanWidth = '75px'
@@ -43,6 +53,7 @@ export class TableDisplayComponent implements OnInit {
   //menus -> Used for Tab Menu
   menus = []
 
+  oldValue = ''
   sideOption = [
     {"label":"Send Mail","value":"Send Mail"},
     {"label":"Details","value":"Details"},
@@ -78,11 +89,18 @@ export class TableDisplayComponent implements OnInit {
   masterData: Observable<MasterData[]>;
 
   backend = {}
+
+
+  startDate = ''
+  endDate = ''
+  notes= 'Summary'
+
   constructor(
     private messageService: MessageService,
     public datepipe: DatePipe,
     private projectService: ProjectsService,
-    private confirmationService : ConfirmationService
+    private confirmationService : ConfirmationService,
+    private location : PlatformLocation
   
   ) {
     this.newArr = this.types.filter(function (record) {
@@ -90,50 +108,97 @@ export class TableDisplayComponent implements OnInit {
     });
     //  console.log(this.date_format_value)
   //  let menArr = _.where(this.projects, {status: "OnRisk"})
-
+this.notes = 'Write Summary'
   }
   ngOnInit() {
    this.loadData();
-
+   this.books = [
+    {
+        name: "Clean Code",
+        author: "Robert Cecil Martin",
+        year: 2008
+    },
+    {
+        name: "Introduction to Algorithms",
+        author: "Thomas H Corman",
+        year: 1989
+    },
+    {
+        name: "Refactoring",
+        author: "Martin Fowler",
+        year: 1999
+    },
+    {
+        name: "Code Complete",
+        author: "Steve McConnell",
+        year: 1993
+    },
+    {
+        name: "Programming Pearls",
+        author: "John Bentley",
+        year: 1986
+    },
+    {
+        name: "The Clean Coder",
+        author: "Robert Cecil Martin",
+        year: 2011
+    },
+    {
+        name: "Coders at Work",
+        author: "Peter Seibel",
+        year: 2009
+    },
+    {
+        name: "Effective Java",
+        author: "Joshua Bloch",
+        year: 2001
+    },
+    {
+        name: "Head First Java",
+        author: "Bert Bates",
+        year: 2003
+    }
+];
   
     this.projectService.getBacked().subscribe((datas) => {
       // this.projects = datas["data"];
       let settings = datas["settings"];
-      // this.copyColumnSettings = [...datas["settings"]];
-      this.copyColumnSettings = JSON.parse(JSON.stringify(datas["settings"]))
-      debugger
-      console.log(this.copyColumnSettings)
-      // this.copyColumnSettings[0]["isVisible"] = false
       this.columnSettings = [...datas["settings"]];
-      console.log('ccs',this.copyColumnSettings)
-      console.log('ccd',this.columnSettings)
-      // this.copyColumnSettings =  _.map(settings, _.clone);
-      // this.columnSettings  = _.map(settings, _.clone);
+
       this.tableFilters = datas["tableFilters"];
       this.resourcesList = datas["resourcesList"];
       this.date_format_type = datas["date_format"];
       this.account = datas["account"];
       this.menu_array = datas["status"];
+      this.loadMenu(this.menu_array);
       this.date_format_value = datas["date_format_value"];
       
       this.copy_date_format_value = datas["date_format_value"]
 
       this.account_value = datas["account_value"];
       this.copy_account_value = datas["account_value"]
-
-      // this.copyColumnSettings = datas["settings"];
-
-      this.loadMenu(this.menu_array);
+   if(this.account_value === '10.5k'){
+    this.amount_boolean = false;
+   }
+     
 
       this.loadStatus(this.menu_array);
-      // this.types = [...this.columnSettings]; // model (buttons)
-
   
-      this.lodaTableFilters(this.projects, this.tableFilters);
+      this.loadTableFilters(this.projects, this.tableFilters);
     });
 }
- 
-lodaTableFilters(projects,tableFilters){
+
+canDeactivate(): Promise<any> | boolean {
+  const confirmResult = confirm('Are you sure you want to leave this page ? ');
+  if (confirmResult === true) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+loadTableFilters(projects,tableFilters){
   tableFilters.forEach((key) => {
     this.curatedFilters[key] = _.uniq(_.pluck(projects, key));
   });
@@ -163,8 +228,10 @@ console.log('CF',this.curatedFilters)
   loadData(){
         this.projectService.getdata().subscribe((data) =>{
          this.projects = data;
+         this.copyProjects  = {...data}
         })
         this.projectService.loadAll()
+
         
   }
 
@@ -194,7 +261,7 @@ console.log('CF',this.curatedFilters)
       "length": archiveArr.length
     }
     this.menus.push(objArchive)
-  //  this.menus=[...this.menus]
+  this.menus=[...this.menus]
   }
   loadStatus(menu){
   let objArr = [];
@@ -230,6 +297,19 @@ onArchive(){
     this.loadData()
   });
   this.loadMenu(this.menu_array)
+
+  this.projectService.update(obj)
+}
+
+notesUpdate(event){
+  var obj = {}
+  this.projects.forEach(element => {
+    if(element.id===this.statusId){
+      element.notes = event;
+      obj=element
+    }
+    this.loadData()
+  });  
 
   this.projectService.update(obj)
 }
@@ -366,15 +446,19 @@ onArchive(){
         object = ele
         ele["status"] = event;
       }
-    });
+    })
     console.log(this.projects);
-    this.loadMenu(this.menu_array)
+    this.loadMenu(this.menu_array);
     this.onRowInlineEdit('status',object)
   }
 
 
 
+change(event){
+  console.log(event)
+}
 
+  //  mcode
 
   //  mcode
   csactive() {
@@ -389,26 +473,54 @@ onArchive(){
   showUndoBtn(index) {
     console.log(index);
     this.showBtn = index;
+    
+    this.startDate = this.projects[this.showBtn-1].timeline.startdate
   }
 
   onch(valued, id) {
     console.log(valued, id);
+    console.log(id,this.projects)
+
     this.setEndDate(valued, id);
   }
   onsch(valued, id) {
     console.log(valued, id);
-    this.setStartDate(valued, id);
+    console.log(id,this.projects);
+     this.setStartDate(valued, id);
+  }
+  csonch(id){
+  
+    for (let i = 0; i < this.projects.length; i++) {
+      if (this.projects[i].id === id) {
+        this.projects[i].timeline.startdate =  '';
+        return;
+      }
+    }
+
+  }
+  ceonch(id){
+    for (let i = 0; i < this.projects.length; i++) {
+      if (this.projects[i].id === id) {
+        this.projects[i].timeline.enddate = '';
+        return;
+      }
+    }
   }
   setStartDate(valued, id) {
     let latest_date = this.datepipe.transform(valued, "yyyy-MM-dd");
     console.log(latest_date);
     for (let i = 0; i < this.projects.length; i++) {
       if (this.projects[i].id === id) {
+        if(latest_date > this.projects[i].timeline.enddate) {
+          alert("start date need to be lesser than end date");
+          return;
+        }
         this.projects[i].timeline.startdate = latest_date;
         return;
       }
     }
     console.log(this.projects);
+    this.datePicker.overlayVisible = false;
   }
 
   setEndDate(valued, id) {
@@ -418,11 +530,18 @@ onArchive(){
     // const index: number = this.tmdata.indexOf(id);
     for (let i = 0; i < this.projects.length; i++) {
       if (this.projects[i].id === id) {
+        if(latest_date < this.projects[i].timeline.startdate) {
+          // console.log("soe");
+          alert("End date need to be bigger then start date");
+
+          return;
+        }
         this.projects[i].timeline.enddate = latest_date;
         return;
       }
     }
     console.log(this.projects);
+    this.datePicker.overlayVisible = false;
   }
   // mcode
 
@@ -442,12 +561,16 @@ onArchive(){
       }
     });
     console.log(this.projects)
-    this.lodaTableFilters(this.projects,this.tableFilters)
+    this.loadTableFilters(this.projects,this.tableFilters)
     this.messageService.add({severity:'success', summary: 'Success', detail:'Row Updated Successfully'});
    
   }
 
+
+  
+
  onRowInlineEdit(field,data){
+  
    console.log(field,data[field])
    var objTracker = data["traker"];
    console.log(objTracker)
@@ -456,8 +579,10 @@ onArchive(){
    var month = date.getMonth()+1
    var dateString = date.getDate()+'.'+month+'.'+date.getFullYear()
    console.log(date)
-   
-   if(field==='estimation'){
+   console.log(this.copyProjects)
+if(data[field] === data[field])
+{
+  if(field==='estimation'){
     obj ={
       "id": data.id,
       "field": field,
@@ -474,19 +599,21 @@ onArchive(){
       "value":  data[field],
       "date" : dateString,
       "time" : date.toLocaleTimeString(),
+      "operation":"Changed"
       }
       objTracker.push(obj)
      }
- 
-  
-   this.projects.forEach(element => {
+} else {
+  alert('the value is not changed')
+}
+ this.projects.forEach(element => {
      if(element.id === data.id){
       element["traker"] = [...objTracker]
       element["lastUpdate"] = date.toUTCString()
      }
    });
    console.log(this.projects)
-   this.lodaTableFilters(this.projects,this.tableFilters)
+   this.loadTableFilters(this.projects,this.tableFilters)
  }
  //Table Settings 
  onSettingsSave(){
@@ -529,6 +656,7 @@ onSaveProject(){
   this.messageService.add({severity:'success', summary: 'Success', detail:'Saved Successfully'});
 
 }
+
 deleteSelectedProjects(){
   console.log('Selected Projects',this.selectedProjects)
   this.confirmationService.confirm({
@@ -558,4 +686,47 @@ onDelete(){
       }
 });  
 }
+
+onSaveTimeLine(field,data,dateType){
+  var objTracker = data["traker"];
+  console.log(objTracker)
+  var obj = {}
+  var date = new Date()
+  var month = date.getMonth()+1
+  var dateString = date.getDate()+'.'+month+'.'+date.getFullYear()
+  console.log(date)
+  console.log(this.copyProjects)
+
+ if( dateType ==='startdate'){
+   obj ={
+     "id": data.id,
+     "field": dateType,
+     "value":  data[field].startdate,
+     "date" : dateString,
+     "time" : date.toLocaleTimeString(),
+     "operation":"Changed"
+   }
+   objTracker.push(obj)  
+  } else {
+   obj = {
+     "id": data.id,
+     "field": dateType,
+     "value":  data[field].enddate,
+     "date" : dateString,
+     "time" : date.toLocaleTimeString(),
+     "operation":"Changed"
+     }
+     objTracker.push(obj)
+    }
+
+this.projects.forEach(element => {
+    if(element.id === data.id){
+     element["traker"] = [...objTracker]
+     element["lastUpdate"] = date.toUTCString()
+    }
+  });
+  console.log(this.projects)
+  this.loadTableFilters(this.projects,this.tableFilters)
+}
+
 }
