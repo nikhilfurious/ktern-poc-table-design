@@ -19,7 +19,6 @@ import {TabMenuModule} from 'primeng/tabmenu';
 // import { TableRowExpandComponent } from './table-row-expand/table-row-expand.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FilterService, MessageService, PrimeNGConfig } from 'primeng/api';
-import { ProductService } from './product.service';
 import {RatingModule} from 'primeng/rating'; 
 import { TimelineModule } from 'primeng/timeline';
 import {CardModule} from 'primeng/card';
@@ -27,11 +26,8 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import {DropdownModule} from 'primeng/dropdown';
 import {ToastModule} from 'primeng/toast';
 import {CascadeSelectModule} from 'primeng/cascadeselect';
-// import { TabMenuComponent } from './tab-menu/tab-menu.component';
-// import { FilterComponent } from './filter/filter.component';
-// import {TabMenuModule} from 'primeng/tabmenu';
-// import {MenuItem} from 'primeng/api';
-import { CustomerService } from './customer.service';
+
+
 import {ListboxModule} from 'primeng/listbox';
 // import { TreeSelectComponent } from './tree-select/tree-select.component'; 
 import { NgZorroAntdModule, NZ_I18N, en_US } from "ng-zorro-antd";
@@ -49,6 +45,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { CanExitGuard } from './can-exit.guard';
+
 // import { ContactComponent } from './contact/contact.component';
 
 @NgModule({
@@ -58,6 +55,7 @@ import { CanExitGuard } from './can-exit.guard';
     MenuItemContent,
     ThousandPipePipe,
     TableDisplayComponent,
+
     // TableCheckComponent,
     // ContactComponent
   
@@ -97,7 +95,7 @@ import { CanExitGuard } from './can-exit.guard';
 
 
   ],
-  providers: [FilterService, ProductService , PrimeNGConfig,MessageService , CustomerService ,CanExitGuard],
+  providers: [FilterService, PrimeNGConfig,MessageService,CanExitGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

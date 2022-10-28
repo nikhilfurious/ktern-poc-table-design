@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Customer } from './customer';
+
 import { MasterData } from './project';
 
 @Injectable({
@@ -58,7 +58,7 @@ updateWholeData(content){
 
 
   loadAll() {
-    debugger
+
     return this.http.get<any>(this.url + 'data')
     .toPromise()
     .then(res => <MasterData[]>res.data)
@@ -66,11 +66,6 @@ updateWholeData(content){
   }
 
   
-  getCustomersLarge() {
-    return this.http.get<any>('assets/customers-large.json')
-        .toPromise()
-        .then(res => <Customer[]>res.data)
-        .then(data => { return data; });
-}
+
 
 }

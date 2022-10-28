@@ -20,9 +20,10 @@ interface Book {
   providers: [DatePipe,MessageService,ConfirmationService,OverlayPanelModule],
 })
 export class TableDisplayComponent implements OnInit, CanExit {
-  books: Book[] = [];
+ 
+
   @ViewChild('dateCalendar' ,{static: false}) datePicker: any;
-  projects: any = [];
+   projects: any = [];
   copyProjects : any = [];
   selectedProjects : any = [];
   rowData = {};
@@ -86,11 +87,8 @@ export class TableDisplayComponent implements OnInit, CanExit {
   menu_array = [];
   menu = true
   statusId = 0;
-  masterData: Observable<MasterData[]>;
 
   backend = {}
-
-
   startDate = ''
   endDate = ''
   notes= 'Summary'
@@ -111,57 +109,8 @@ export class TableDisplayComponent implements OnInit, CanExit {
 this.notes = 'Write Summary'
   }
   ngOnInit() {
-   this.loadData();
-   this.books = [
-    {
-        name: "Clean Code",
-        author: "Robert Cecil Martin",
-        year: 2008
-    },
-    {
-        name: "Introduction to Algorithms",
-        author: "Thomas H Corman",
-        year: 1989
-    },
-    {
-        name: "Refactoring",
-        author: "Martin Fowler",
-        year: 1999
-    },
-    {
-        name: "Code Complete",
-        author: "Steve McConnell",
-        year: 1993
-    },
-    {
-        name: "Programming Pearls",
-        author: "John Bentley",
-        year: 1986
-    },
-    {
-        name: "The Clean Coder",
-        author: "Robert Cecil Martin",
-        year: 2011
-    },
-    {
-        name: "Coders at Work",
-        author: "Peter Seibel",
-        year: 2009
-    },
-    {
-        name: "Effective Java",
-        author: "Joshua Bloch",
-        year: 2001
-    },
-    {
-        name: "Head First Java",
-        author: "Bert Bates",
-        year: 2003
-    }
-];
-  
+    this.loadData()
     this.projectService.getBacked().subscribe((datas) => {
-      // this.projects = datas["data"];
       let settings = datas["settings"];
       this.columnSettings = [...datas["settings"]];
 
@@ -177,9 +126,9 @@ this.notes = 'Write Summary'
 
       this.account_value = datas["account_value"];
       this.copy_account_value = datas["account_value"]
-   if(this.account_value === '10.5k'){
-    this.amount_boolean = false;
-   }
+       if(this.account_value === '10.5k'){
+         this.amount_boolean = false;
+          }
      
 
       this.loadStatus(this.menu_array);
@@ -227,8 +176,8 @@ console.log('CF',this.curatedFilters)
 }
   loadData(){
         this.projectService.getdata().subscribe((data) =>{
-         this.projects = data;
-         this.copyProjects  = {...data}
+         this.projects = data; //[]
+       
         })
         this.projectService.loadAll()
 

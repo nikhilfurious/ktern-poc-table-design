@@ -1,7 +1,7 @@
-import { LocationStrategy } from '@angular/common';
+import { LocationStrategy, PlatformLocation } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
-import { ProductService } from './product.service';
+
 import { ProjectsService } from './projects.service';
 
 @Component({
@@ -11,11 +11,17 @@ import { ProjectsService } from './projects.service';
 })
 export class AppComponent {
   title = 'Angular-table-prime-ng';
-  projects: any[];
+  projectsData: any = []
   
-  constructor(router: Router) {
+  constructor(
+    
+    private projectService: ProjectsService,
+    private location : PlatformLocation) {
+    this.projectService.getdata().subscribe((data) =>{
+      this.projectsData = data;
+     })
+    
 }
-  
 
 
 }
